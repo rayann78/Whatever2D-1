@@ -1,35 +1,53 @@
 package TP2D;
 
-import java.awt.Graphics;
 import java.io.File;
 import java.util.Arrays;
 
 import javax.imageio.ImageIO;
 
 public class Monster extends DynamicThings {
-    private Orientation orientation = Orientation.RIGHT;
-    private Attack attack = new Attack(60, 60);
+    private int initialX = 120;
+    private int initialY = 120;
 
-    public Monster(int x, int y, int width, int height) {
-        super(x, y, width, height);
+    public Monster(int x, int y, int width, int height, int id) {
+        super(x, y, width, height, id);
+        initialX = x;
+        initialY = y;
         try {
             this.setImage(ImageIO.read(new File("img/monsterTileSheet.png")));
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    public void setOrientation(Orientation orientation) {
-        this.orientation = orientation;
-    }
-
-    public Orientation getOrientation() {
-        return orientation;
+        health = MAX_HEALTH;
+        attack = new Attack(60, 60);
     }
 
     public void action(Dungeon dungeon, int speed) {
+        if (isDead) {
+            return;
+        }
+        int dx=0, dy=0;
+        switch (getOrientation()) {
+            case UP:
+                dx = 0;
+                dy = -height;
+                break;
+            case DOWN:
+                dx = 0;
+                dy = height;
+                break;
+            case LEFT:
+                dx = -width;
+                dy = 0;
+                break;
+            case RIGHT:
+                dx = width;
+                dy = 0;
+                break;
+        }
+        HitBox attackHitBox = new HitBox(x + dx, y + dy, attack.getWidth(), attack.getHeight());
         // If hero is on a tile next to the monster, attack the hero
-        if(Hero.getInstance().getHitBox().intersect(new HitBox(this.x - (width/4), this.y - (height/4), width*1.5, height*1.5))) {
+        if(Hero.getInstance().getHitBox().intersect(attackHitBox)) {
             attack();
         } else {
             double[] move = new double[2];
@@ -156,41 +174,17 @@ public class Monster extends DynamicThings {
         return new double[]{0, 0};
     }
 
-    @Override
-    public void draw(Graphics g) {
-        int attitude = orientation.getI();
-        int index = (int) ((System.currentTimeMillis()/125)%10);
-        g.drawImage(image,(int)x,(int)y,(int)x+width,(int) y+ height,index*96,100*attitude,(index+1)*96,100*(attitude+1),null,null);
-        
-        int dx=0, dy=0;
-        switch (getOrientation()) {
-            case UP:
-                dx = 0;
-                dy = -height;
-                break;
-            case DOWN:
-                dx = 0;
-                dy = height;
-                break;
-            case LEFT:
-                dx = -width;
-                dy = 0;
-                break;
-            case RIGHT:
-                dx = width;
-                dy = 0;
-                break;
-        }
-        if(isAttacking()){
-            attack.draw(g, attitude, (int)(x + dx), (int)(y + dy));
-        }
+    public String toString() {
+        return "Monster";
     }
 
-    public void attack(){
-        attack.startAttack();
+    public void reset() {
+        x = initialX;
+        y = initialY;
+        this.hitBox = new HitBox(x, y, width, height);
     }
 
-    public boolean isAttacking(){
-        return attack.isAttacking;
+    public void die() {
+        super.die();
     }
 }

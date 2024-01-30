@@ -96,12 +96,20 @@ public class Dungeon {
             for (int x=0;x<width;x++){
                 for (int y=0;y<height;y++){
                     switch (this.map[x][y]){
-                        case 'M' :  npcList.add(new Monster(x*tileManager.getWidth(), y*tileManager.getHeigth(), tileManager.getWidth(), tileManager.getHeigth()));
+                        case 'M' :  npcList.add(new Monster(x*tileManager.getWidth(), y*tileManager.getHeigth(), tileManager.getWidth(), tileManager.getHeigth(), npcList.size() + 1));
                                     break;
                     }
                 }
             }
+
+            for(DynamicThings npc : npcList) {
+                if(npc instanceof Monster) {
+                    npc.addPossibleTarget((DynamicThings)Hero.getInstance());
+                    Hero.getInstance().addPossibleTarget(npc);
+                }
+            }
         }
+
         renderList.clear();
         for (int x=0;x<width;x++){
             for (int y=0;y<height;y++){
@@ -152,5 +160,14 @@ public class Dungeon {
                 ((Monster) npc).action(this, speed-2);
             }
         }
+    }
+
+    public void reset() {
+        npcList.clear();
+        respawnListOfThings();
+    }
+
+    public boolean hasWon() {
+        return npcList.size() == 0;
     }
 }

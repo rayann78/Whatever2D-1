@@ -1,6 +1,7 @@
 package TP2D;
 
-import java.awt.*;
+import java.awt.Graphics;
+import java.awt.Image;
 
 public class Things {
     protected double x;
@@ -29,4 +30,10 @@ public class Things {
         g.drawImage(image,(int) x,(int) y,null);
     }
 
+    public void reset(int x, int y, int width, int height) {
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+    }
 }

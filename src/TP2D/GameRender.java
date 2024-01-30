@@ -1,6 +1,7 @@
 package TP2D;
 
 import java.awt.Graphics;
+import java.util.Iterator;
 
 import javax.swing.JPanel;
 
@@ -20,8 +21,14 @@ public class GameRender extends JPanel {
         for (Things t : dungeon.getRenderList()){
             t.draw(g);
         }
-        for (DynamicThings d : dungeon.getNPCList()){
-            d.draw(g);
+        Iterator<DynamicThings> iterator = dungeon.getNPCList().iterator();
+        while (iterator.hasNext()) {
+            DynamicThings d = iterator.next();
+            if (!d.isDead) {
+                d.draw(g);
+            } else {
+                iterator.remove();
+            }
         }
         hero.draw(g);
     }

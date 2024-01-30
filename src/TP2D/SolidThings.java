@@ -1,7 +1,6 @@
 package TP2D;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Image;
 
 public class SolidThings extends Things {
     protected HitBox hitBox;
@@ -18,5 +17,10 @@ public class SolidThings extends Things {
 
     public HitBox getHitBox() {
         return hitBox;
+    }
+
+    public void reset(int x, int y, int width, int height) {
+        super.reset(x,y,width,height);
+        this.hitBox = new HitBox(x,y,width,height);
     }
 }

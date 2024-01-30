@@ -52,6 +52,17 @@ public class MainInterface extends JFrame implements KeyListener {
 
                     }
                 }
+
+                if (hero.isDead) {
+                    GameOverMenu gameOverMenu = new GameOverMenu(false);
+                    gameOverMenu.setVisible(true);
+                    restart();
+                } else if (dungeon.hasWon()) {
+                    GameOverMenu gameOverMenu = new GameOverMenu(true);
+                    gameOverMenu.setVisible(true);
+                    restart();
+                }
+
                 dungeon.updateNPCs(speed);
             }
         };
@@ -130,5 +141,10 @@ public class MainInterface extends JFrame implements KeyListener {
         if (backgroundMusic != null) {
             backgroundMusic.loop(Clip.LOOP_CONTINUOUSLY);
         }
+    }
+
+    public void restart() {
+        dungeon.reset();
+        hero.reset();
     }
 }
