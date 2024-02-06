@@ -34,11 +34,7 @@ public final class Hero extends DynamicThings{
     public String toString(){
         return "Hero";
     }
-
-    public void die() {
-        isDead = true;
-    }
-
+    
     public void reset(){
         super.reset();
         x=initialX;
